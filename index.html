@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Toll Gate</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="./index.css">
+    <style>
+        .bar1 {
+            width: 400px;
+            background-color: yellow;
+            border: 1px solid lightgray;
+            height: 30px;
+            rotate: 90deg;
+            margin-left: 550px;
+            margin-top: -450px;
+        }
+
+        .bar {
+            border: 1px solid lightgrey;
+            background-color: red;
+            height: 400px;
+            width: 20px;
+            border-radius: 10px;
+            margin-left: 750px;
+            transform: rotate(-90deg);
+            position: relative;
+            transition: transform 0.5s;
+            transform-origin: 50% 0;
+        }
+
+        .bar.open {
+            transform: rotate(90deg);
+            transform-style: preserve-3d;
+            animation: rotateGate 3s linear forwards;
+        }
+
+        .road {
+            border: 1px solid lightcyan;
+            background-color: black;
+            height: 300px;
+            rotate: 90deg;
+            justify-content: center;
+            align-items: center;
+            width: 550px;
+            margin: 250px auto;
+
+        }
+
+        .line {
+            background-color: white;
+            height: 20px;
+            margin-top: 10px;
+        }
+
+        .line1 {
+            background-color: white;
+            height: 20px;
+            margin-top: 110px;
+        }
+
+        .line2 {
+            background-color: white;
+            height: 20px;
+            margin-top: 110px;
+        }
+
+        .car-movement {
+            margin-left: 550px;
+            height: 150px;
+            width: 350px;
+            rotate: 180deg;
+
+        }
+
+        span {
+            margin: 350px auto;
+        }
+
+        .welcome-image {
+            margin-bottom: 350px;
+            margin-top: -1450px;
+            margin-left: 250px;
+            width: 340px;
+            height: 420px;
+        }
+
+        .msg_msg{
+            font-size:55px;
+            color: red;
+        }
+        
+    </style>
+    <script type="text/javascript">
+
+
+
+        var ptopic = "ai100/carpar001";
+
+
+
+        function redirectToDestination() {
+            // Logic to redirect to the first desired HTML page after 1 second
+            setTimeout(() => {
+                window.location.href = "slot1.html";
+            }, 3000);
+        }
+
+        // function redirectToDestinationSlo2() {
+        //     // Logic to redirect to the second desired HTML page after 3 seconds
+
+
+
+        // }
+
+        function onConnectionLost() {
+            console.log("connection lost");
+
+            connected_flag = 0;
+        }
+        function onFailure(message) {
+            console.log("Failed");
+            setTimeout(MQTTconnect, reconnectTimeout);
+        }
+
+        function onMessageArrived(r_message) {
+            out_msg = "Message received " + r_message.payloadString;
+            out_msg = out_msg + "      Topic " + r_message.destinationName + "<br/>";
+            out_msg = "<b>" + out_msg + "</b>";
+            //console.log(out_msg+row);
+            try {
+
+                if (r_message.payloadString === "0" && r_message.destinationName === ptopic) {
+                    document.getElementById('msg').innerHTML = `Unauthorized`
+                    barElement.style.transform = 'rotate(-90deg)';
+                }
+                else {
+
+                    document.getElementById('msg').innerHTML = `welcome  ${r_message.payloadString}`
+                    barElement.style.transform = 'rotate(-180deg)';
+                    var welcomeImage = document.createElement('img');
+                    welcomeImage.src = 'https://media.tenor.com/AvHPuvcRU4wAAAAi/cute-penguin.gif'; // Replace with the path to your image
+                    welcomeImage.alt = 'Welcome Image';
+                    welcomeImage.classList.add('welcome-image');
+                    document.body.appendChild(welcomeImage);
+                    console.log("open");
+                    hasRun = false;
+                    var timeout = setTimeout(() => {
+
+                    }, 30000);
+                    redirectToDestination();
+                }
+
+            }
+
+            catch (err) {
+                //document.getElementById("out_messages").innerHTML=err.message;
+            }
+
+            mcount += 1;
+            console.log(mcount + "  " + row);
+        }
+
+        function onConnected(recon, url) {
+            console.log(" in onConnected " + reconn);
+        }
+        function onConnect() {
+            // Once a connection has been made, make a subscription and send a message.
+            //document.getElementById("status_messages").innerHTML ="Connected to "+host +"on port "+port;
+            connected_flag = 1;
+            //  document.getElementById("status").innerHTML = "";
+            console.log("on Connect " + connected_flag);
+            sub_topics();
+
+        }
+        function disconnect() {
+            if (connected_flag == 1)
+                mqtt.disconnect();
+        }
+
+        function MQTTconnect() {
+            var clean_sessions = true;
+            var user_name = "emqx";
+            console.log("clean= " + clean_sessions);
+            var password = "public";
+
+
+
+            //document.getElementById("status_messages").innerHTML ="";
+            var s = "broker.hivemq.com";
+            var p = 1883;
+            if (p != "") {
+                port = parseInt(p);
+            }
+            if (s != "") {
+                host = s;
+                console.log("host");
+            }
+
+            console.log("connecting to " + host + " " + port + "clean session=" + clean_sessions);
+            console.log("user " + user_name);
+            var x = Math.floor(Math.random() * 10000);
+            var cname = "orderform-" + x;
+            mqtt = new Paho.MQTT.Client(host, port, cname);
+            //document.write("connecting to "+ host);
+            var options = {
+                //useSSL:true,
+                timeout: 3,
+                cleanSession: clean_sessions,
+                onSuccess: onConnect,
+                onFailure: onFailure,
+
+            };
+
+            options.userName = user_name;
+
+            options.password = password;
+
+            mqtt.onConnectionLost = onConnectionLost;
+            mqtt.onMessageArrived = onMessageArrived;
+            mqtt.onConnected = onConnected;
+
+            mqtt.connect(options);
+            return false;
+
+
+        }
+        function sub_topics() {
+            //document.getElementById("status_messages").innerHTML ="";
+            if (connected_flag == 0) {
+                out_msg = "<b>Not Connected so can't subscribe</b>"
+                console.log(out_msg);
+                document.getElementById("s").innerHTML = out_msg;
+                return false;
+            }
+
+
+
+            //var stopic= document.forms["subs"]["Stopic"].value;
+            console.log("here");
+            var sqos = 0;
+            if (sqos > 2)
+                sqos = 0;
+
+
+            console.log("Subscribing to topic =" + ptopic + " QOS " + sqos);
+
+
+            var soptions = {
+                qos: sqos,
+            };
+
+
+            mqtt.subscribe(ptopic, soptions);
+
+
+
+            return false;
+        }
+
+        function send_message(topi, message) {
+            //document.getElementById("status_messages").innerHTML ="";
+            if (connected_flag == 0) {
+                out_msg = "<b>Not Connected so can't send</b>"
+                console.log(out_msg);
+                //document.getElementById("status_messages").innerHTML = out_msg;
+                return false;
+            }
+            var pqos = 0;
+            if (pqos > 2)
+                pqos = 0;
+            var msg = message;
+            console.log(msg);
+            //document.getElementById("status_messages").innerHTML="Sending message  "+msg;
+            var topic = topi;
+
+            retain_flag = false;
+            message = new Paho.MQTT.Message(msg);
+            if (topic == "")
+                message.destinationName = "test-topic";
+            else
+                message.destinationName = topic;
+            message.qos = pqos;
+            message.retained = retain_flag;
+            mqtt.send(message);
+            return false;
+        }
+
+
+    </script>
+
+
+</head>
+
+<body>
+    <div class="msg_msg">
+        <span id="msg"></span>
+    </div>
+    
+    <div class="madel">
+        <div class="road">
+            <div class="line">
+            </div>
+            <div class="line1">
+            </div>
+            <div class="line2">
+            </div>
+        </div>
+        <div class="bar1"></div>
+        <div class="bar" id="mqttToggle"></div>
+    </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        var connected_flag = 0
+        var mqtt;
+        var reconnectTimeout = 2;
+
+        var row = 0;
+        var out_msg = "";
+        var mcount = 0;
+        var clean_sessions = true;
+        var user_name = "emqx";
+        console.log("clean= " + clean_sessions);
+        var password = "public";
+
+
+
+
+        var s = "broker.hivemq.com";
+        var p = 8000;
+        if (p != "") {
+            port = parseInt(p);
+        }
+        if (s != "") {
+            host = s;
+            console.log("host");
+        }
+
+        console.log("connecting to " + host + " " + port + "clean session=" + clean_sessions);
+        console.log("user " + user_name);
+
+        var x = Math.floor(Math.random() * 10000);
+        var cname = "orderform-" + x;
+        mqtt = new Paho.MQTT.Client(host, port, cname);
+        //document.write("connecting to "+ host);
+        var options = {
+            //useSSL:true,
+            timeout: 3,
+            cleanSession: clean_sessions,
+            onSuccess: onConnect,
+            onFailure: onFailure,
+
+        };
+
+        options.userName = user_name;
+
+        options.password = password;
+
+        mqtt.onConnectionLost = onConnectionLost;
+        mqtt.onMessageArrived = onMessageArrived;
+        mqtt.onConnected = onConnected;
+
+        mqtt.connect(options);
+        var barElement = document.getElementById('mqttToggle');
+        let hasRun = false;
+
+
+
+    </script>
+
+</body>
+
+</html>

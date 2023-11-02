@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Booking Form</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="./booking.css">
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+
+</head>
+
+<body>
+  <h1>Car Parking Booking System</h1>
+<div class="container">
+  <form id="bookingForm">
+    <label for="location" style="font-size: 30px;">Location:</label><br>
+    <select id="location" name="location" required>
+      <option value="">Select a location</option>
+      <option value="location1">Location 1</option>
+      <option value="location2">Location 2</option>
+    </select><br>
+    <label for="dateTimeSlot" style="font-size: 30px;"> Slot:</label><br>
+    <select id="dateTimeSlot" name="dateTimeSlot" required>
+      <option value="">Select a slot</option>
+    </select><br>
+    <input type="submit" value="Park">
+  </form>
+
+  <form id="bookingForm1">
+    <label for="location1" style="font-size: 30px;">Location:</label><br>
+    <select id="location1" name="location1" required>
+      <option value="">Select a location</option>
+      <option value="location1">Location 1</option>
+      <option value="location2">Location 2</option>
+    </select><br>
+    <label for="dateTimeSlot1" style="font-size: 30px;"> Slot:</label><br>
+    <select id="dateTimeSlot1" name="dateTimeSlot1" required>
+      <option value="">Select a slot</option>
+    </select><br>
+    <input type="submit" value="UnPark">
+  </form>
+</div>
+<div id="includeHtml" class="slot1"></div>
+<div id="includeHtml1" ></div>
+ 
+
+</div>
+  <script>
+    // Add your JavaScript code here
+    document.getElementById('location').addEventListener('change', function () {
+      var selectedLocation = this.value;
+      var slots = {
+        location1: ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10", "slot11", "slot12", "slot13", "slot14", "slot15", "slot16"],
+        location2: ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10", "slot11", "slot12", "slot13", "slot14", "slot15", "slot16"]
+      };
+
+      var slotDropdown = document.getElementById('dateTimeSlot');
+      slotDropdown.innerHTML = '';
+
+      for (var i = 0; i < slots[selectedLocation].length; i++) {
+        var option = document.createElement('option');
+        option.value = slots[selectedLocation][i];
+        option.text = slots[selectedLocation][i];
+        slotDropdown.appendChild(option);
+      }
+    });
+
+    document.getElementById('bookingForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+
+      var location = document.getElementById('location').value;
+      var selectedSlot = document.getElementById('dateTimeSlot').value;
+      console.log(selectedSlot);
+      if (!location || !selectedSlot) {
+        alert('Please fill out all the required fields.');
+        return;
+      }
+
+
+
+
+
+
+      console.log(selectedSlot);
+
+
+      if (location == "location1" && selectedSlot == "slot1") {
+        mqttClient.publish('slot001/cabi001/loc001ker/sta001tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot1") {
+        mqttClient.publish('slot002/cabi001/loc001ker/sta001tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot2") {
+
+        mqttClient.publish('slot001/cabi002/loc002ker/sta002tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot2") {
+        mqttClient.publish('slot002/cabi002/loc002ker/sta002tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot3") {
+        mqttClient.publish('slot001/cabi003/loc003ker/sta003tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot3") {
+        mqttClient.publish('slot002/cabi003/loc003ker/sta003tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot4") {
+        mqttClient.publish('slot001/cabi004/loc004ker/sta004tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot4") {
+        mqttClient.publish('slot002/cabi004/loc004ker/sta004tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot5") {
+        mqttClient.publish('slot001/cabi005/loc005ker/sta005tus', "1"), { retain: true };
+      }
+      if (location == "location2" && selectedSlot == "slot5") {
+        mqttClient.publish('slot002/cabi005/loc005ker/sta005tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot6") {
+        mqttClient.publish('slot001/cabi006/loc006ker/sta006tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot6") {
+        mqttClient.publish('slot002/cabi006/loc006ker/sta006tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot7") {
+        mqttClient.publish('slot001/cabi007/loc007ker/sta007tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot7") {
+        mqttClient.publish('slot002/cabi007/loc007ker/sta007tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot8") {
+        mqttClient.publish('slot001/cabi008/loc008ker/sta008tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot8") {
+        mqttClient.publish('slot002/cabi008/loc008ker/sta008tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot9") {
+        mqttClient.publish('slot001/cabi009/loc009ker/sta009tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot9") {
+        mqttClient.publish('slot002/cabi009/loc009ker/sta009tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot10") {
+        mqttClient.publish('slot001/cabi0010/loc0010ker/sta0010tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot10") {
+        mqttClient.publish('slot002/cabi0010/loc0010ker/sta0010tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot11") {
+        mqttClient.publish('slot001/cabi0011/loc0011ker/sta0011tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot11") {
+        mqttClient.publish('slot002/cabi0011/loc0011ker/sta0011tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot12") {
+        mqttClient.publish('slot001/cabi0012/loc0012ker/sta0012tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot12") {
+        mqttClient.publish('slot002/cabi0012/loc0012ker/sta0012tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot13") {
+        mqttClient.publish('slot001/cabi0013/loc0013ker/sta0013tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot13") {
+        mqttClient.publish('slot002/cabi0013/loc0013ker/sta0013tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot14") {
+        mqttClient.publish('slot001/cabi0014/loc0014ker/sta0014tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot14") {
+        mqttClient.publish('slot002/cabi0014/loc0014ker/sta0014tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot15") {
+        mqttClient.publish('slot001/cabi0015/loc0015ker/sta0015tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot15") {
+        mqttClient.publish('slot002/cabi0015/loc0015ker/sta0015tus', "1", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot16") {
+        mqttClient.publish('slot001/cabi0016/loc0016ker/sta0016tus', "1", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot16") {
+        mqttClient.publish('slot002/cabi0016/loc0016ker/sta0016tus', "1", { retain: true });
+      }
+      //  row.insertCell(5).innerHTML = '<button onclick="deleteRow(this)">UnPark</button>';
+
+      alert('Slot Parked successfully!');
+
+    });
+
+
+
+    // Rest of your script
+  </script>
+
+  <script>
+    // Add your JavaScript code here
+    document.getElementById('location1').addEventListener('change', function () {
+      var selectedLocation = this.value;
+      var slots = {
+        location1: ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10", "slot11", "slot12", "slot13", "slot14", "slot15", "slot16"],
+        location2: ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10", "slot11", "slot12", "slot13", "slot14", "slot15", "slot16"]
+      };
+
+      var slotDropdown = document.getElementById('dateTimeSlot1');
+      slotDropdown.innerHTML = '';
+
+      for (var i = 0; i < slots[selectedLocation].length; i++) {
+        var option = document.createElement('option');
+        option.value = slots[selectedLocation][i];
+        option.text = slots[selectedLocation][i];
+        slotDropdown.appendChild(option);
+      }
+    });
+
+    document.getElementById('bookingForm1').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+
+      var location = document.getElementById('location1').value;
+      var selectedSlot = document.getElementById('dateTimeSlot1').value;
+      console.log(selectedSlot);
+      if (!location || !selectedSlot) {
+        alert('Please fill out all the required fields.');
+        return;
+      }
+
+
+
+
+
+
+      console.log(selectedSlot);
+      if (location == "location1" && selectedSlot == "slot1") {
+        mqttClient.publish('slot001/cabi001/loc001ker/sta001tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot1") {
+        mqttClient.publish('slot002/cabi001/loc001ker/sta001tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot2") {
+
+        mqttClient.publish('slot001/cabi002/loc002ker/sta002tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot2") {
+        mqttClient.publish('slot002/cabi002/loc002ker/sta002tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot3") {
+        mqttClient.publish('slot001/cabi003/loc003ker/sta003tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot3") {
+        mqttClient.publish('slot002/cabi003/loc003ker/sta003tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot4") {
+        mqttClient.publish('slot001/cabi004/loc004ker/sta004tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot4") {
+        mqttClient.publish('slot002/cabi004/loc004ker/sta004tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot5") {
+        mqttClient.publish('slot001/cabi005/loc005ker/sta005tus', "0"), { retain: true };
+      }
+      if (location == "location2" && selectedSlot == "slot5") {
+        mqttClient.publish('slot002/cabi005/loc005ker/sta005tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot6") {
+        mqttClient.publish('slot001/cabi006/loc006ker/sta006tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot6") {
+        mqttClient.publish('slot002/cabi006/loc006ker/sta006tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot7") {
+        mqttClient.publish('slot001/cabi007/loc007ker/sta007tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot7") {
+        mqttClient.publish('slot002/cabi007/loc007ker/sta007tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot8") {
+        mqttClient.publish('slot001/cabi008/loc008ker/sta008tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot8") {
+        mqttClient.publish('slot002/cabi008/loc008ker/sta008tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot9") {
+        mqttClient.publish('slot001/cabi009/loc009ker/sta009tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot9") {
+        mqttClient.publish('slot002/cabi009/loc009ker/sta009tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot10") {
+        mqttClient.publish('slot001/cabi0010/loc0010ker/sta0010tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot10") {
+        mqttClient.publish('slot002/cabi0010/loc0010ker/sta0010tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot11") {
+        mqttClient.publish('slot001/cabi0011/loc0011ker/sta0011tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot11") {
+        mqttClient.publish('slot002/cabi0011/loc0011ker/sta0011tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot12") {
+        mqttClient.publish('slot001/cabi0012/loc0012ker/sta0012tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot12") {
+        mqttClient.publish('slot002/cabi0012/loc0012ker/sta0012tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot13") {
+        mqttClient.publish('slot001/cabi0013/loc0013ker/sta0013tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot13") {
+        mqttClient.publish('slot002/cabi0013/loc0013ker/sta0013tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot14") {
+        mqttClient.publish('slot001/cabi0014/loc0014ker/sta0014tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot14") {
+        mqttClient.publish('slot002/cabi0014/loc0014ker/sta0014tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot15") {
+        mqttClient.publish('slot001/cabi0015/loc0015ker/sta0015tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot15") {
+        mqttClient.publish('slot002/cabi0015/loc0015ker/sta0015tus', "0", { retain: true });
+      }
+      if (location == "location1" && selectedSlot == "slot16") {
+        mqttClient.publish('slot001/cabi0016/loc0016ker/sta0016tus', "0", { retain: true });
+      }
+      if (location == "location2" && selectedSlot == "slot16") {
+        mqttClient.publish('slot002/cabi0016/loc0016ker/sta0016tus', "0", { retain: true });
+      }
+      <!-- row.insertCell(5).innerHTML = '<button onclick="deleteRow(this)">UnPark</button>'; -->
+
+      alert('Slot UnParked successfully!');
+
+    });
+
+
+
+    // Rest of your script
+  </script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.6/mqtt.min.js"></script>
+
+  <script>
+    const mqttClient = mqtt.connect('wss://broker.emqx.io:8084/mqtt'); // Use wss for secure connection
+
+
+
+    console.log("published");
+  </script>
+
+<script>
+  $(function() {
+     $("#includeHtml").load("location1.html");
+    
+  });
+
+
+ 
+ 
+  
+</script>
+
+
+</body>
+
+</html>

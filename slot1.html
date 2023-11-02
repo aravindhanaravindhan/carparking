@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location 1</title>
+<link rel="stylesheet" href="./slot1.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        var stopic1 = "slot001/cabi001/loc001ker/sta001tus";
+        var stopic2 = "slot001/cabi002/loc002ker/sta002tus";
+        var stopic3 = "slot001/cabi003/loc003ker/sta003tus";
+        var stopic4 = "slot001/cabi004/loc004ker/sta004tus";
+        var stopic5 = "slot001/cabi005/loc005ker/sta005tus";
+        var stopic6 = "slot001/cabi006/loc006ker/sta006tus";
+        var stopic7 = "slot001/cabi007/loc007ker/sta007tus";
+        var stopic8 = "slot001/cabi008/loc008ker/sta008tus";
+        var stopic9 = "slot001/cabi009/loc009ker/sta009tus";
+        var stopic10 = "slot001/cabi0010/loc0010ker/sta0010tus";
+        var stopic11 = "slot001/cabi0011/loc0011ker/sta0011tus";
+        var stopic12 = "slot001/cabi0012/loc0012ker/sta0012tus";
+        var stopic13 = "slot001/cabi0013/loc0013ker/sta0013tus";
+        var stopic14 = "slot001/cabi0014/loc0014ker/sta0014tus";
+        var stopic15 = "slot001/cabi0015/loc0015ker/sta0015tus";
+        var stopic16 = "slot001/cabi0016/loc0016ker/sta0016tus";
+
+        function onConnectionLost() {
+            console.log("connection lost");
+
+            connected_flag = 0;
+        }
+        function onFailure(message) {
+            console.log("Failed");
+            setTimeout(MQTTconnect, reconnectTimeout);
+        }
+        function onMessageArrived(r_message) {
+            out_msg = "Message received " + r_message.payloadString;
+            out_msg = out_msg + "      Topic " + r_message.destinationName + "<br/>";
+            out_msg = "<b>" + out_msg + "</b>";
+            //console.log(out_msg+row);
+            try {
+
+
+                if (r_message.destinationName == stopic1) {
+                    changeOccupancyStatus(1, parseInt(r_message.payloadString));
+                }
+
+
+                if (r_message.destinationName == stopic2) {
+                    changeOccupancyStatus(2, parseInt(r_message.payloadString));
+                }
+
+
+
+                if ((r_message.destinationName == stopic3)) {
+                    changeOccupancyStatus(3, parseInt(r_message.payloadString));
+                }
+
+
+                if ((r_message.destinationName == stopic4)) {
+                    changeOccupancyStatus(4, parseInt(r_message.payloadString));
+                }
+
+
+                if ((r_message.destinationName == stopic5)) {
+                    changeOccupancyStatus(5, parseInt(r_message.payloadString));
+                }
+
+
+
+                if ((r_message.destinationName == stopic6)) {
+                    changeOccupancyStatus(6, parseInt(r_message.payloadString));
+                }
+
+
+
+
+                if ((r_message.destinationName == stopic7)) {
+                    changeOccupancyStatus(7, parseInt(r_message.payloadString));
+                }
+
+
+
+
+                if ((r_message.destinationName == stopic8)) {
+                    changeOccupancyStatus(8, parseInt(r_message.payloadString));
+                }
+
+
+
+
+                if ((r_message.destinationName == stopic9)) {
+                    changeOccupancyStatus(9, parseInt(r_message.payloadString));
+                }
+
+
+
+                if ((r_message.destinationName == stopic10)) {
+                    changeOccupancyStatus(10, parseInt(r_message.payloadString));
+                }
+
+
+                if ((r_message.destinationName == stopic11)) {
+                    changeOccupancyStatus(11, parseInt(r_message.payloadString));
+                }
+
+
+
+                if ((r_message.destinationName == stopic12)) {
+                    changeOccupancyStatus(12, parseInt(r_message.payloadString));
+                }
+
+
+
+                if ((r_message.destinationName == stopic13)) {
+                    changeOccupancyStatus(13, parseInt(r_message.payloadString));
+                }
+
+
+
+                if ((r_message.destinationName == stopic14)) {
+                    changeOccupancyStatus(14, parseInt(r_message.payloadString));
+                }
+
+                if ((r_message.destinationName == stopic15)) {
+                    changeOccupancyStatus(15, parseInt(r_message.payloadString));
+                }
+                if ((r_message.destinationName == stopic16)) {
+                    changeOccupancyStatus(16, parseInt(r_message.payloadString));
+                }
+
+            }
+            catch (err) {
+                //document.getElementById("out_messages").innerHTML=err.message;
+            }
+
+
+            mcount += 1;
+            console.log(mcount + "  " + row);
+        }
+
+        function onConnected(recon, url) {
+            console.log(" in onConnected " + reconn);
+        }
+        function onConnect() {
+            // Once a connection has been made, make a subscription and send a message.
+            //document.getElementById("status_messages").innerHTML ="Connected to "+host +"on port "+port;
+            connected_flag = 1;
+            //  document.getElementById("status").innerHTML = "";
+            console.log("on Connect " + connected_flag);
+            sub_topics();
+
+        }
+        function disconnect() {
+            if (connected_flag == 1)
+                mqtt.disconnect();
+        }
+
+        function MQTTconnect() {
+            var clean_sessions = true;
+            var user_name = "emqx";
+            console.log("clean= " + clean_sessions);
+            var password = "public";
+
+
+
+            //document.getElementById("status_messages").innerHTML ="";
+            var s = "broker.emqx.io";
+            var p = 8083;
+            if (p != "") {
+                port = parseInt(p);
+            }
+            if (s != "") {
+                host = s;
+                console.log("host");
+            }
+
+            console.log("connecting to " + host + " " + port + "clean session=" + clean_sessions);
+            console.log("user " + user_name);
+            var x = Math.floor(Math.random() * 10000);
+            var cname = "orderform-" + x;
+            mqtt = new Paho.MQTT.Client(host, port, cname);
+            //document.write("connecting to "+ host);
+            var options = {
+                //useSSL:true,
+                timeout: 3,
+                cleanSession: clean_sessions,
+                onSuccess: onConnect,
+                onFailure: onFailure,
+
+            };
+
+            options.userName = user_name;
+
+            options.password = password;
+
+            mqtt.onConnectionLost = onConnectionLost;
+            mqtt.onMessageArrived = onMessageArrived;
+            mqtt.onConnected = onConnected;
+
+            mqtt.connect(options);
+            return false;
+
+
+        }
+        function sub_topics() {
+            //document.getElementById("status_messages").innerHTML ="";
+            if (connected_flag == 0) {
+                out_msg = "<b>Not Connected so can't subscribe</b>"
+                console.log(out_msg);
+                document.getElementById("s").innerHTML = out_msg;
+                return false;
+            }
+
+
+
+            //var stopic= document.forms["subs"]["Stopic"].value;
+            console.log("here");
+            var sqos = 0;
+            if (sqos > 2)
+                sqos = 0;
+
+
+            console.log("Subscribing to topic =" + stopic1 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic2 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic3 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic4 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic5 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic6 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic7 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic8 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic9 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic10 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic11 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic12 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic13 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic14 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic15 + " QOS " + sqos);
+            console.log("Subscribing to topic =" + stopic16 + " QOS " + sqos);
+
+
+
+
+
+            var soptions = {
+                qos: sqos,
+            };
+
+            mqtt.subscribe(stopic1, soptions);
+            mqtt.subscribe(stopic2, soptions);
+            mqtt.subscribe(stopic3, soptions);
+            mqtt.subscribe(stopic4, soptions);
+            mqtt.subscribe(stopic5, soptions);
+            mqtt.subscribe(stopic6, soptions);
+            mqtt.subscribe(stopic7, soptions);
+            mqtt.subscribe(stopic8, soptions);
+            mqtt.subscribe(stopic9, soptions);
+            mqtt.subscribe(stopic10, soptions);
+            mqtt.subscribe(stopic11, soptions);
+            mqtt.subscribe(stopic12, soptions);
+            mqtt.subscribe(stopic13, soptions);
+            mqtt.subscribe(stopic14, soptions);
+            mqtt.subscribe(stopic15, soptions);
+            mqtt.subscribe(stopic16, soptions);
+
+
+            return false;
+        }
+
+        function send_message(topi, message) {
+            //document.getElementById("status_messages").innerHTML ="";
+            if (connected_flag == 0) {
+                out_msg = "<b>Not Connected so can't send</b>"
+                console.log(out_msg);
+                //document.getElementById("status_messages").innerHTML = out_msg;
+                return false;
+            }
+            var pqos = 0;
+            if (pqos > 2)
+                pqos = 0;
+            var msg = message;
+            console.log(msg);
+            //document.getElementById("status_messages").innerHTML="Sending message  "+msg;
+            var topic = topi;
+
+            retain_flag = false;
+            message = new Paho.MQTT.Message(msg);
+            if (topic == "")
+                message.destinationName = "test-topic";
+            else
+                message.destinationName = topic;
+            message.qos = pqos;
+            message.retained = retain_flag;
+            mqtt.send(message);
+            return false;
+        }
+
+
+    </script>
+
+
+    <h1>Car Parking Location L1</h1>
+
+    <div class='FlexContainer' id="parkingSlots">
+        <div class="slot" id="slot1">
+            <h3>Parking Slot 1 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot2">
+            <h3>Parking Slot 2 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot3">
+            <h3>Parking Slot 3 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot4">
+            <h3>Parking Slot 4 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot5">
+            <h3>Parking Slot 5 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot6">
+            <h3>Parking Slot 6 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot7">
+            <h3>Parking Slot 7 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot8">
+            <h3>Parking Slot 8 (Unoccupied)</h3>
+        </div>
+
+    </div>
+    <div class="road">
+        <div class="line"></div>
+        <div class="line1"></div>
+        <div class="line2"></div>
+    </div>
+  <section class='FlexContainer'>
+        <div class="slot" id="slot9">
+            <h3>Parking Slot 9 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot10">
+            <h3>Parking Slot 10 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot11">
+            <h3>Parking Slot 11 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot12">
+            <h3>Parking Slot 12 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot13">
+            <h3>Parking Slot 13 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot14">
+            <h3>Parking Slot 14 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot15">
+            <h3>Parking Slot 15 (Unoccupied)</h3>
+        </div>
+        <div class="slot" id="slot16">
+            <h3>Parking Slot 16 (Unoccupied)</h3>
+        </div>
+    </section> 
+    <div class="contenttable">
+        <h2 id="totalSlots">Total Slots: 16</h2>
+        <h2 id="occupiedSlots">Occupied Slots: 0</h2>
+        <h2 id="unoccupiedSlots">Unoccupied Slots: 16</h2>
+    </div>
+
+    <script>
+
+        function redirectToDestination() {
+            // Logic to redirect to the first desired HTML page after 1 second
+            setTimeout(() => {
+                window.location.href = "slot2.html";
+            }, 30000);
+        }
+    redirectToDestination()
+    </script>
+
+    <script>
+        const totalSlots = 16;
+        let occupiedSlots = 0;
+        const data1 =
+            function handleSlotChange() {
+                const selectedSlot = document.getElementById('slotList').value;
+                console.log(selectedSlot, "jyuf")
+                const value = confirm('Is the selected slot occupied?') ? 1 : 0;
+                changeOccupancyStatus(selectedSlot, value);
+            }
+
+        function changeOccupancyStatus(slotNumber, value) {
+            const slot = document.getElementById('slot' + slotNumber);
+            if (value === 1) {
+                if (!slot.classList.contains('occupied')) {
+                    occupiedSlots++;
+                }
+                slot.innerHTML = '<h3>Parking Slot ' + slotNumber + ' (Occupied)</h3>';
+                slot.classList.remove('unoccupied');
+                slot.classList.add('occupied');
+            } else if (value === 0) {
+                if (slot.classList.contains('occupied')) {
+                    occupiedSlots--;
+                }
+                slot.innerHTML = '<h3>Parking Slot ' + slotNumber + ' (Unoccupied)</h3>';
+                slot.classList.remove('occupied');
+                slot.classList.add('unoccupied');
+            } else {
+                console.error('Invalid value for occupancy status');
+            }
+            document.getElementById('totalSlots').textContent = 'Total Slots: ' + totalSlots;
+            document.getElementById('occupiedSlots').textContent = 'Occupied Slots: ' + occupiedSlots;
+            document.getElementById('unoccupiedSlots').textContent = 'Unoccupied Slots: ' + (totalSlots - occupiedSlots);
+        }
+
+        // Example usage for slot occupancy statuses, you can adjust these as needed
+        changeOccupancyStatus(1, 0);
+        changeOccupancyStatus(2, 0);
+        changeOccupancyStatus(3, 0);
+        changeOccupancyStatus(4, 0);
+        changeOccupancyStatus(5, 0);
+        changeOccupancyStatus(6, 0);
+        changeOccupancyStatus(7, 0);
+        changeOccupancyStatus(8, 0);
+        changeOccupancyStatus(9, 0);
+        changeOccupancyStatus(10, 0);
+        changeOccupancyStatus(11, 0);
+        changeOccupancyStatus(12, 0);
+        changeOccupancyStatus(13, 0);
+        changeOccupancyStatus(14, 0);
+        changeOccupancyStatus(15, 0);
+        changeOccupancyStatus(16, 0);
+    </script>
+    <script>
+        var connected_flag = 0
+        var mqtt;
+        var reconnectTimeout = 2;
+
+        var row = 0;
+        var out_msg = "";
+        var mcount = 0;
+        var clean_sessions = true;
+        var user_name = "emqx";
+        console.log("clean= " + clean_sessions);
+        var password = "public";
+
+
+
+
+        var s = "broker.emqx.io";
+        var p = 8083;
+        if (p != "") {
+            port = parseInt(p);
+        }
+        if (s != "") {
+            host = s;
+            console.log("host");
+        }
+
+        console.log("connecting to " + host + " " + port + "clean session=" + clean_sessions);
+        console.log("user " + user_name);
+
+        var x = Math.floor(Math.random() * 10000);
+        var cname = "orderform-" + x;
+        mqtt = new Paho.MQTT.Client(host, port, cname);
+        //document.write("connecting to "+ host);
+        var options = {
+            //useSSL:true,
+            timeout: 3,
+            cleanSession: clean_sessions,
+            onSuccess: onConnect,
+            onFailure: onFailure,
+
+        };
+
+        options.userName = user_name;
+
+        options.password = password;
+
+        mqtt.onConnectionLost = onConnectionLost;
+        mqtt.onMessageArrived = onMessageArrived;
+        mqtt.onConnected = onConnected;
+
+        mqtt.connect(options);
+
+    </script>
+
+
+
+
+    <!-- Code injected by live-server -->
+    <script>
+        // <![CDATA[  <-- For SVG support
+        if ('WebSocket' in window) {
+            (function () {
+                function refreshCSS() {
+                    var sheets = [].slice.call(document.getElementsByTagName("link"));
+                    var head = document.getElementsByTagName("head")[0];
+                    for (var i = 0; i < sheets.length; ++i) {
+                        var elem = sheets[i];
+                        var parent = elem.parentElement || head;
+                        parent.removeChild(elem);
+                        var rel = elem.rel;
+                        if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                        }
+                        parent.appendChild(elem);
+                    }
+                }
+                var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+                var address = protocol + window.location.host + window.location.pathname + '/ws';
+                var socket = new WebSocket(address);
+                socket.onmessage = function (msg) {
+                    if (msg.data == 'reload') window.location.reload();
+                    else if (msg.data == 'refreshcss') refreshCSS();
+                };
+                if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+                    console.log('Live reload enabled.');
+                    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+                }
+            })();
+        }
+        else {
+            console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+        }
+        // ]]>
+    </script>
+</body>
+
+</html>
